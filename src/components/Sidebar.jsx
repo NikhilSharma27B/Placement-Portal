@@ -35,83 +35,98 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-gray-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out">
-      <div className="flex items-center space-x-2 px-4">
-        <span className="text-2xl font-extrabold">Placement Portal</span>
-      </div>
+    <div className="bg-[#1F2937] text-white w-64 space-y-6 py-7 px-4 shadow-xl absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-300 ease-in-out rounded-r-xl">
+  <div className="flex items-center space-x-3 px-2">
+    <span className="text-3xl font-bold tracking-wide">🎓 Placement Portal</span>
+  </div>
 
-      <nav>
-        {userType === "student" ? (
-          <>
-            <Link
-              to="/student-dashboard"
-              className={`block py-2.5 px-4 rounded transition duration-200 ${isActive("/student-dashboard")
-                ? "bg-blue-500 text-white"
-                : "hover:bg-gray-700"}`}
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/resume-upload"
-              className={`block py-2.5 px-4 rounded transition duration-200 ${isActive("/resume-upload")
-                ? "bg-blue-500 text-white"
-                : "hover:bg-gray-700"}`}
-            >
-              Resume Upload
-            </Link>
-            <Link
-              to="/job-listings"
-              className={`block py-2.5 px-4 rounded transition duration-200 ${isActive("/job-listings")
-                ? "bg-blue-500 text-white"
-                : "hover:bg-gray-700"}`}
-            >
-              Job Listings
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link
-              to="/tpo-dashboard"
-              className={`block py-2.5 px-4 rounded transition duration-200 ${isActive("/tpo-dashboard")
-                ? "bg-blue-500 text-white"
-                : "hover:bg-gray-700"}`}
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/manage-jobs"
-              className={`block py-2.5 px-4 rounded transition duration-200 ${isActive("/manage-jobs")
-                ? "bg-blue-500 text-white"
-                : "hover:bg-gray-700"}`}
-            >
-              Manage Jobs
-            </Link>
-            <Link
-              to="/post-job"
-              className={`block py-2.5 px-4 rounded transition duration-200 ${isActive("/post-job")
-                ? "bg-blue-500 text-white"
-                : "hover:bg-gray-700"}`}
-            >
-              Post Job
-            </Link>
-            <Link
-              to="/company-profiles"
-              className={`block py-2.5 px-4 rounded transition duration-200 ${isActive("/company-profiles")
-                ? "bg-blue-500 text-white"
-                : "hover:bg-gray-700"}`}
-            >
-              Companies
-            </Link>
-          </>
-        )}
+  <nav className="mt-6 space-y-2">
+    {userType === "student" ? (
+      <>
         <Link
-          to="/"
-          className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"
+          to="/student-dashboard"
+          className={`block py-2 px-4 rounded-lg transition duration-200 font-medium ${
+            isActive("/student-dashboard")
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-700 hover:text-blue-300"
+          }`}
         >
-          Logout
+          📊 Dashboard
         </Link>
-      </nav>
-    </div>
+        <Link
+          to="/resume-upload"
+          className={`block py-2 px-4 rounded-lg transition duration-200 font-medium ${
+            isActive("/resume-upload")
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-700 hover:text-blue-300"
+          }`}
+        >
+          📁 Resume Upload
+        </Link>
+        <Link
+          to="/job-listings"
+          className={`block py-2 px-4 rounded-lg transition duration-200 font-medium ${
+            isActive("/job-listings")
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-700 hover:text-blue-300"
+          }`}
+        >
+          💼 Job Listings
+        </Link>
+      </>
+    ) : (
+      <>
+        <Link
+          to="/tpo-dashboard"
+          className={`block py-2 px-4 rounded-lg transition duration-200 font-medium ${
+            isActive("/tpo-dashboard")
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-700 hover:text-blue-300"
+          }`}
+        >
+          📊 Dashboard
+        </Link>
+        <Link
+          to="/manage-jobs"
+          className={`block py-2 px-4 rounded-lg transition duration-200 font-medium ${
+            isActive("/manage-jobs")
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-700 hover:text-blue-300"
+          }`}
+        >
+          🛠 Manage Jobs
+        </Link>
+        <Link
+          to="/post-job"
+          className={`block py-2 px-4 rounded-lg transition duration-200 font-medium ${
+            isActive("/post-job")
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-700 hover:text-blue-300"
+          }`}
+        >
+          📝 Post Job
+        </Link>
+        <Link
+          to="/company-profiles"
+          className={`block py-2 px-4 rounded-lg transition duration-200 font-medium ${
+            isActive("/company-profiles")
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-700 hover:text-blue-300"
+          }`}
+        >
+          🏢 Companies
+        </Link>
+      </>
+    )}
+    <Link
+      to="/"
+      className="block py-2 px-4 rounded-lg transition duration-200 font-medium hover:bg-gray-700 hover:text-red-400"
+    >
+      🚪 Logout
+    </Link>
+  </nav>
+</div>
+
   );
 };
 

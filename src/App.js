@@ -14,12 +14,14 @@ import JobPostForm from "./pages/JobPostForm";
 import ManageJobs from "./pages/ManageJobs";
 import JobApplications from "./pages/JobApplications";
 import CompanyProfiles from "./pages/CompanyProfiles";
+import IntroductionPage from "./pages/Introduction";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<IntroductionPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/student-dashboard" element={<StudentDashboard />} />
         <Route path="/tpo-dashboard" element={<TPODashboard />} />
         <Route path="/resume-upload" element={<ResumeUpload />} />
