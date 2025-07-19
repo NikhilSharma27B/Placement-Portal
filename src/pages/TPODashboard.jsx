@@ -45,8 +45,21 @@ const TPODashboard = () => {
         const studentsData = [];
 
         studentsSnap.forEach((doc) => {
-          studentsData.push({ id: doc.id, ...doc.data() });
+          const student = { id: doc.id, ...doc.data() };
+
+          // Normalize skills
+          if (student.skills && Array.isArray(student.skills)) {
+            student.skills = student.skills.map(skill => skill.toUpperCase());
+          }
+
+          // Normalize branch
+          if (student.branch && typeof student.branch === "string") {
+            student.branch = student.branch.toUpperCase();
+          }
+
+          studentsData.push(student);
         });
+
 
         setStudents(studentsData);
         setFilteredStudents(studentsData);
@@ -128,15 +141,15 @@ const TPODashboard = () => {
       );
     }
 
-    if (filters.skill) {
+    if (filters.branch) {
+      const inputBranch = filters.branch.toUpperCase();
       result = result.filter(
         (student) =>
-          student.skills &&
-          student.skills.some((skill) =>
-            skill.toLowerCase().includes(filters.skill.toLowerCase())
-          )
+          student.branch &&
+          student.branch.includes(inputBranch)
       );
     }
+
 
     if (filters.placementStatus !== "all") {
       const isPlaced = filters.placementStatus === "placed";
@@ -299,7 +312,7 @@ const TPODashboard = () => {
               <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-6">Placement Status</h2>
                 <div className="h-72 flex items-center justify-center">
-                  <Pie data={placementChartData} options={{ 
+                  <Pie data={placementChartData} options={{
                     maintainAspectRatio: false,
                     plugins: {
                       legend: {
@@ -564,11 +577,10 @@ const TPODashboard = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
-                              className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium shadow-sm ${
-                                student.isPlaced
-                                  ? "bg-green-100 text-green-800 border border-green-200"
-                                  : "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                              }`}
+                              className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium shadow-sm ${student.isPlaced
+                                ? "bg-green-100 text-green-800 border border-green-200"
+                                : "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                                }`}
                             >
                               {student.isPlaced ? "Placed" : "Not Placed"}
                             </span>
@@ -578,15 +590,13 @@ const TPODashboard = () => {
                               onClick={() =>
                                 handleTogglePlacementStatus(student.id, student.isPlaced)
                               }
-                              className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white shadow-sm hover:shadow-md transition-all ${
-                                student.isPlaced
-                                  ? "bg-yellow-500 hover:bg-yellow-600"
-                                  : "bg-green-500 hover:bg-green-600"
-                              } focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                                student.isPlaced
+                              className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white shadow-sm hover:shadow-md transition-all ${student.isPlaced
+                                ? "bg-yellow-500 hover:bg-yellow-600"
+                                : "bg-green-500 hover:bg-green-600"
+                                } focus:outline-none focus:ring-2 focus:ring-offset-2 ${student.isPlaced
                                   ? "focus:ring-yellow-500"
                                   : "focus:ring-green-500"
-                              }`}
+                                }`}
                             >
                               {student.isPlaced ? (
                                 <>
