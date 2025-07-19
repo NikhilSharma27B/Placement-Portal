@@ -71,7 +71,9 @@ const StudentDashboard = () => {
     return (
       <div className="flex flex-col justify-center items-center h-screen bg-gray-50">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-4"></div>
-        <p className="text-gray-600 font-medium text-lg">Loading your dashboard...</p>
+        <p className="text-gray-600 font-medium text-lg">
+          Loading your dashboard...
+        </p>
       </div>
     );
   }
@@ -82,9 +84,8 @@ const StudentDashboard = () => {
       <div className="flex-1 flex flex-col overflow-hidden w-full">
         <Navbar onLogout={handleLogout} />
 
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 md:p-8 pt-20 pl-4"> {/* Add padding to ensure content is properly positioned */}
+        <main className="flex-1  my-20 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 md:p-8 pt-28 pl-4">
           <div className="container mx-auto">
-            <h1 className="text-3xl font-bold text-blue-800 mb-8 fade-in">Student Dashboard</h1>
 
             <StudentProfile studentData={studentData} />
           </div>

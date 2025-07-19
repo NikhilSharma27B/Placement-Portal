@@ -50,7 +50,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-[5px] h-[calc(100%-5px)] w-64 bg-[#1F2937] text-white space-y-6 py-7 px-4 shadow-xl transform transition-transform duration-300 ease-in-out z-[60] rounded-r-xl
+        className={`fixed left-0 top-[0px] h-[calc(100%-5px)] w-64 bg-[#1F2937] text-white space-y-6 py-7 px-4 shadow-xl transform transition-transform duration-300 ease-in-out z-[60] rounded-r-xl
         ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         {/* Close button */}
