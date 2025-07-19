@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { auth, db } from "../firebase-config";
 import { doc, getDoc } from "firebase/firestore";
+import ManageJobs from "../pages/ManageJobs";
 
 const Sidebar = () => {
   const [userType, setUserType] = useState("student");
@@ -104,6 +105,7 @@ const Sidebar = () => {
           >
             🚪 Logout
           </Link>
+        
         </nav>
       </div>
     </>

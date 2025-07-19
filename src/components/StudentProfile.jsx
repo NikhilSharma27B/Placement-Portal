@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+
 const StudentProfile = ({ studentData }) => {
   const navigate = useNavigate();
 
@@ -153,6 +155,8 @@ const StudentProfile = ({ studentData }) => {
             >
               Upload Resume Now
             </button>
+        
+        
             <p className="text-sm text-gray-400 mt-2">Upload your resume to apply for jobs</p>
           </div>
         )}

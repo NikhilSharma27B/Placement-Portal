@@ -4,7 +4,7 @@ import { auth, db } from "../firebase-config";
 import { signOut } from "firebase/auth";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
+// import Sidebar from "../components/Sidebar";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
 
@@ -256,7 +256,7 @@ const TPODashboard = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar onLogout={handleLogout} />
 

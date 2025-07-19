@@ -32,7 +32,7 @@ function App() {
         <Route path="/job-apply/:jobId" element={<JobApply />} />
         <Route path="/post-job" element={<JobPostForm />} />
         <Route path="/edit-job/:jobId" element={<JobPostForm />} />
-        <Route path="/manage-jobs" element={<ManageJobs />} />
+        <Route path="/post-jobs" element={<ManageJobs />} />
         <Route path="/job-applications/:jobId" element={<JobApplications />} />
         
         {/* Company related routes */}
