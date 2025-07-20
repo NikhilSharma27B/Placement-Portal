@@ -5,11 +5,29 @@ import { signOut } from "firebase/auth";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import Navbar from "../components/Navbar";
 // import Sidebar from "../components/Sidebar";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
-import { Pie, Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+} from "chart.js";
+import { Pie, Bar } from "react-chartjs-2";
+import ManageJobs from "./ManageJobs"; // Adjust path if needed
 
 // Register ChartJS components
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+);
 
 const TPODashboard = () => {
   const [students, setStudents] = useState([]);
@@ -28,6 +46,7 @@ const TPODashboard = () => {
   });
   const [branchStats, setBranchStats] = useState({});
   const [cgpaRangeStats, setCgpaRangeStats] = useState({});
+  const [showManageJobs, setShowManageJobs] = useState(false);
 
   const navigate = useNavigate();
 
@@ -49,7 +68,7 @@ const TPODashboard = () => {
 
           // Normalize skills
           if (student.skills && Array.isArray(student.skills)) {
-            student.skills = student.skills.map(skill => skill.toUpperCase());
+            student.skills = student.skills.map((skill) => skill.toUpperCase());
           }
 
           // Normalize branch
@@ -60,12 +79,13 @@ const TPODashboard = () => {
           studentsData.push(student);
         });
 
-
         setStudents(studentsData);
         setFilteredStudents(studentsData);
 
         // Calculate stats
-        const placed = studentsData.filter((student) => student.isPlaced).length;
+        const placed = studentsData.filter(
+          (student) => student.isPlaced
+        ).length;
         setStats({
           total: studentsData.length,
           placed,
@@ -144,12 +164,9 @@ const TPODashboard = () => {
     if (filters.branch) {
       const inputBranch = filters.branch.toUpperCase();
       result = result.filter(
-        (student) =>
-          student.branch &&
-          student.branch.includes(inputBranch)
+        (student) => student.branch && student.branch.includes(inputBranch)
       );
     }
-
 
     if (filters.placementStatus !== "all") {
       const isPlaced = filters.placementStatus === "placed";
@@ -190,7 +207,9 @@ const TPODashboard = () => {
       setStudents(updatedStudents);
 
       // Recalculate stats
-      const placed = updatedStudents.filter((student) => student.isPlaced).length;
+      const placed = updatedStudents.filter(
+        (student) => student.isPlaced
+      ).length;
       setStats({
         total: updatedStudents.length,
         placed,
@@ -249,7 +268,9 @@ const TPODashboard = () => {
     return (
       <div className="flex flex-col justify-center items-center h-screen bg-gray-50">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-4"></div>
-        <p className="text-gray-600 font-medium text-lg">Loading dashboard data...</p>
+        <p className="text-gray-600 font-medium text-lg">
+          Loading dashboard data...
+        </p>
       </div>
     );
   }
@@ -262,19 +283,59 @@ const TPODashboard = () => {
 
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 md:p-8">
           <div className="container mx-auto">
-            <h1 className="text-3xl font-bold text-blue-800 mb-8 fade-in">TPO Dashboard</h1>
+            <h1 className="text-3xl my-11 font-bold text-blue-800 mb-8 fade-in">
+              TPO Dashboard
+            </h1>
+            {!showManageJobs ? (
+              <>
+                <div className="flex justify-end p-4">
+                  <button
+                    onClick={() => setShowManageJobs(true)}
+                    className="px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition"
+                  >
+                    Job Posting
+                  </button>
+                </div>
 
+                {/* Place your existing dashboard content here */}
+              </>
+            ) : (
+              <div className="p-4">
+                <button
+                  onClick={() => setShowManageJobs(false)}
+                  className="mb-4 px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+                >
+                  ← Back to Dashboard
+                </button>
+                <ManageJobs />
+              </div>
+            )}
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-lg font-semibold text-gray-700 mb-2">Total Students</h2>
-                    <p className="text-4xl font-bold text-blue-600">{stats.total}</p>
+                    <h2 className="text-lg font-semibold text-gray-700 mb-2">
+                      Total Students
+                    </h2>
+                    <p className="text-4xl font-bold text-blue-600">
+                      {stats.total}
+                    </p>
                   </div>
                   <div className="bg-blue-100 p-3 rounded-full">
-                    <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <svg
+                      className="h-8 w-8 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -282,12 +343,27 @@ const TPODashboard = () => {
               <div className="bg-white rounded-lg shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-lg font-semibold text-gray-700 mb-2">Placed</h2>
-                    <p className="text-4xl font-bold text-green-600">{stats.placed}</p>
+                    <h2 className="text-lg font-semibold text-gray-700 mb-2">
+                      Placed
+                    </h2>
+                    <p className="text-4xl font-bold text-green-600">
+                      {stats.placed}
+                    </p>
                   </div>
                   <div className="bg-green-100 p-3 rounded-full">
-                    <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="h-8 w-8 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -295,12 +371,27 @@ const TPODashboard = () => {
               <div className="bg-white rounded-lg shadow-lg p-6 border-l-4 border-yellow-500 hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-lg font-semibold text-gray-700 mb-2">Not Placed</h2>
-                    <p className="text-4xl font-bold text-yellow-600">{stats.notPlaced}</p>
+                    <h2 className="text-lg font-semibold text-gray-700 mb-2">
+                      Not Placed
+                    </h2>
+                    <p className="text-4xl font-bold text-yellow-600">
+                      {stats.notPlaced}
+                    </p>
                   </div>
                   <div className="bg-yellow-100 p-3 rounded-full">
-                    <svg className="h-8 w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    <svg
+                      className="h-8 w-8 text-yellow-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -310,27 +401,34 @@ const TPODashboard = () => {
             {/* Charts */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Placement Status</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+                  Placement Status
+                </h2>
                 <div className="h-72 flex items-center justify-center">
-                  <Pie data={placementChartData} options={{
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: {
-                        position: 'bottom',
-                        labels: {
-                          font: {
-                            size: 14,
-                            weight: 'bold'
+                  <Pie
+                    data={placementChartData}
+                    options={{
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
+                          position: "bottom",
+                          labels: {
+                            font: {
+                              size: 14,
+                              weight: "bold",
+                            },
+                            padding: 20,
                           },
-                          padding: 20
-                        }
-                      }
-                    }
-                  }} />
+                        },
+                      },
+                    }}
+                  />
                 </div>
               </div>
               <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Branch-wise Statistics</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+                  Branch-wise Statistics
+                </h2>
                 <div className="h-72">
                   <Bar
                     data={branchChartData}
@@ -340,26 +438,26 @@ const TPODashboard = () => {
                         y: {
                           beginAtZero: true,
                           grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                          }
+                            color: "rgba(0, 0, 0, 0.05)",
+                          },
                         },
                         x: {
                           grid: {
-                            display: false
-                          }
-                        }
+                            display: false,
+                          },
+                        },
                       },
                       plugins: {
                         legend: {
-                          position: 'bottom',
+                          position: "bottom",
                           labels: {
                             font: {
-                              size: 12
+                              size: 12,
                             },
-                            padding: 20
-                          }
-                        }
-                      }
+                            padding: 20,
+                          },
+                        },
+                      },
                     }}
                   />
                 </div>
@@ -368,10 +466,23 @@ const TPODashboard = () => {
 
             <div className="bg-white rounded-lg shadow-lg p-6 mb-8 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
               <div className="flex items-center mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-blue-600 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
                 </svg>
-                <h2 className="text-2xl font-semibold text-gray-900">CGPA Range Statistics</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">
+                  CGPA Range Statistics
+                </h2>
               </div>
               <div className="h-72">
                 <Bar
@@ -382,26 +493,26 @@ const TPODashboard = () => {
                       y: {
                         beginAtZero: true,
                         grid: {
-                          color: 'rgba(0, 0, 0, 0.05)'
-                        }
+                          color: "rgba(0, 0, 0, 0.05)",
+                        },
                       },
                       x: {
                         grid: {
-                          display: false
-                        }
-                      }
+                          display: false,
+                        },
+                      },
                     },
                     plugins: {
                       legend: {
-                        position: 'bottom',
+                        position: "bottom",
                         labels: {
                           font: {
-                            size: 12
+                            size: 12,
                           },
-                          padding: 20
-                        }
-                      }
-                    }
+                          padding: 20,
+                        },
+                      },
+                    },
                   }}
                 />
               </div>
@@ -410,10 +521,23 @@ const TPODashboard = () => {
             {/* Filters */}
             <div className="bg-white rounded-lg shadow-lg p-6 mb-8 hover:shadow-xl transition-shadow duration-300 border border-gray-100">
               <div className="flex items-center mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-blue-600 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                  />
                 </svg>
-                <h2 className="text-2xl font-semibold text-gray-900">Filters</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">
+                  Filters
+                </h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
@@ -479,10 +603,23 @@ const TPODashboard = () => {
             {/* Students Table */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300">
               <div className="flex items-center p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-blue-600 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                  />
                 </svg>
-                <h2 className="text-2xl font-semibold text-gray-900">Student Data</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">
+                  Student Data
+                </h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -535,14 +672,19 @@ const TPODashboard = () => {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {filteredStudents.length > 0 ? (
                       filteredStudents.map((student) => (
-                        <tr key={student.id} className="hover:bg-blue-50/30 transition-colors duration-150">
+                        <tr
+                          key={student.id}
+                          className="hover:bg-blue-50/30 transition-colors duration-150"
+                        >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-medium text-gray-900">
                               {student.name || "Not provided"}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-600">{student.email}</div>
+                            <div className="text-sm text-gray-600">
+                              {student.email}
+                            </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-medium text-gray-900">
@@ -557,16 +699,20 @@ const TPODashboard = () => {
                           <td className="px-6 py-4">
                             <div className="flex flex-wrap gap-1.5">
                               {student.skills && student.skills.length > 0 ? (
-                                student.skills.slice(0, 3).map((skill, index) => (
-                                  <span
-                                    key={index}
-                                    className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-sm"
-                                  >
-                                    {skill}
-                                  </span>
-                                ))
+                                student.skills
+                                  .slice(0, 3)
+                                  .map((skill, index) => (
+                                    <span
+                                      key={index}
+                                      className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-sm"
+                                    >
+                                      {skill}
+                                    </span>
+                                  ))
                               ) : (
-                                <span className="text-sm text-gray-500 italic">None</span>
+                                <span className="text-sm text-gray-500 italic">
+                                  None
+                                </span>
                               )}
                               {student.skills && student.skills.length > 3 && (
                                 <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-gray-200 text-gray-800 shadow-sm">
@@ -577,10 +723,11 @@ const TPODashboard = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
-                              className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium shadow-sm ${student.isPlaced
-                                ? "bg-green-100 text-green-800 border border-green-200"
-                                : "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                                }`}
+                              className={`inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium shadow-sm ${
+                                student.isPlaced
+                                  ? "bg-green-100 text-green-800 border border-green-200"
+                                  : "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                              }`}
                             >
                               {student.isPlaced ? "Placed" : "Not Placed"}
                             </span>
@@ -588,27 +735,54 @@ const TPODashboard = () => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <button
                               onClick={() =>
-                                handleTogglePlacementStatus(student.id, student.isPlaced)
+                                handleTogglePlacementStatus(
+                                  student.id,
+                                  student.isPlaced
+                                )
                               }
-                              className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white shadow-sm hover:shadow-md transition-all ${student.isPlaced
-                                ? "bg-yellow-500 hover:bg-yellow-600"
-                                : "bg-green-500 hover:bg-green-600"
-                                } focus:outline-none focus:ring-2 focus:ring-offset-2 ${student.isPlaced
+                              className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white shadow-sm hover:shadow-md transition-all ${
+                                student.isPlaced
+                                  ? "bg-yellow-500 hover:bg-yellow-600"
+                                  : "bg-green-500 hover:bg-green-600"
+                              } focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                                student.isPlaced
                                   ? "focus:ring-yellow-500"
                                   : "focus:ring-green-500"
-                                }`}
+                              }`}
                             >
                               {student.isPlaced ? (
                                 <>
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4 mr-1"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M6 18L18 6M6 6l12 12"
+                                    />
                                   </svg>
                                   Mark as Not Placed
                                 </>
                               ) : (
                                 <>
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4 mr-1"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M5 13l4 4L19 7"
+                                    />
                                   </svg>
                                   Mark as Placed
                                 </>
@@ -621,11 +795,26 @@ const TPODashboard = () => {
                       <tr>
                         <td colSpan="7" className="px-6 py-8 text-center">
                           <div className="flex flex-col items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-12 w-12 text-gray-400 mb-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
                             </svg>
-                            <p className="text-gray-600 text-lg font-medium">No students found matching the filters</p>
-                            <p className="text-gray-500 mt-1">Try adjusting your filter criteria</p>
+                            <p className="text-gray-600 text-lg font-medium">
+                              No students found matching the filters
+                            </p>
+                            <p className="text-gray-500 mt-1">
+                              Try adjusting your filter criteria
+                            </p>
                           </div>
                         </td>
                       </tr>

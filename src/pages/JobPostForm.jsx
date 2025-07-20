@@ -191,7 +191,7 @@ const JobPostForm = () => {
               </h1>
               <button
                 onClick={handleCancel}
-                className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded"
+                className="bg-gray-500 my-11 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded"
               >
                 Cancel
               </button>

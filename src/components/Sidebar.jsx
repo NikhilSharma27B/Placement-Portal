@@ -7,6 +7,7 @@ import ManageJobs from "../pages/ManageJobs";
 const Sidebar = () => {
   const [userType, setUserType] = useState("student");
   const [isOpen, setIsOpen] = useState(false);
+  const [showManageJobs, setShowManageJobs] = useState(false);
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -88,9 +89,17 @@ const Sidebar = () => {
               <SidebarLink to="/tpo-dashboard" active={isActive("/tpo-dashboard")}>
                 📊 Dashboard
               </SidebarLink>
-              <SidebarLink to="/manage-jobs" active={isActive("/manage-jobs")}>
+
+              {/* Toggle ManageJobs without routing */}
+              <button
+                onClick={() => setShowManageJobs((prev) => !prev)}
+                className={`w-full text-left py-2 px-4 rounded-lg transition font-medium ${
+                  showManageJobs ? "bg-blue-600 text-white" : "hover:bg-gray-700 hover:text-blue-300"
+                }`}
+              >
                 🛠 Manage Jobs
-              </SidebarLink>
+              </button>
+
               <SidebarLink to="/post-job" active={isActive("/post-job")}>
                 📝 Post Job
               </SidebarLink>
@@ -99,27 +108,33 @@ const Sidebar = () => {
               </SidebarLink>
             </>
           )}
+
+          {/* Render ManageJobs Component (above Logout) */}
+          {showManageJobs && (
+            <div className="mt-2 bg-gray-800 p-2 rounded shadow max-h-[400px] overflow-y-auto">
+              <ManageJobs />
+            </div>
+          )}
+
+          {/* Logout */}
           <Link
             to="/"
             className="block py-2 px-4 rounded-lg transition font-medium hover:bg-gray-700 hover:text-red-400"
           >
             🚪 Logout
           </Link>
-        
         </nav>
       </div>
     </>
   );
 };
 
-// Sidebar link component
+// SidebarLink component
 const SidebarLink = ({ to, children, active }) => (
   <Link
     to={to}
     className={`block py-2 px-4 rounded-lg transition font-medium ${
-      active
-        ? "bg-blue-600 text-white"
-        : "hover:bg-gray-700 hover:text-blue-300"
+      active ? "bg-blue-600 text-white" : "hover:bg-gray-700 hover:text-blue-300"
     }`}
   >
     {children}

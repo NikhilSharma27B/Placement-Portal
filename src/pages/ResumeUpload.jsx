@@ -8,6 +8,7 @@ import Sidebar from "../components/Sidebar";
 import { createWorker } from 'tesseract.js';
 import { uploadToCloudinary } from '../cloudinary-config';
 
+
 // Test Tesseract.js Function (unchanged)
 const testTesseract = async () => {
   try {

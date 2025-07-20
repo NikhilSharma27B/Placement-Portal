@@ -4,6 +4,7 @@ import { auth, db } from "../firebase-config";
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import ManageJobs from "./ManageJobs";
 
 const JobListings = () => {
   const [jobs, setJobs] = useState([]);
@@ -223,8 +224,9 @@ const JobListings = () => {
                         >
                           Apply
                         </button>
+                       
                       </div>
-                    </div>
+                    </div> 
                   </div>
                 ))
               ) : (
